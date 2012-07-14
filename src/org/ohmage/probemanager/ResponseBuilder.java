@@ -6,8 +6,11 @@ import android.os.RemoteException;
 import android.text.TextUtils;
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Arrays;
 
 /**
  * Response builder class which makes it easy to create the response and send
@@ -179,7 +182,9 @@ public class ResponseBuilder implements ProbeWriter.Builder {
      * 
      * @param location
      * @param timezone
-     * @param status
+     * @param status: A string describing location status. Must be one of:
+     *            unavailable, valid, inaccurate, stale. If the status is
+     *            unavailable, it is an error to send a location object.
      * @return
      */
     public ResponseBuilder withLocation(Location location, String timezone, String status) {
@@ -198,7 +203,9 @@ public class ResponseBuilder implements ProbeWriter.Builder {
      * @param longitude
      * @param accuracy
      * @param provider
-     * @param status
+     * @param status: A string describing location status. Must be one of:
+     *            unavailable, valid, inaccurate, stale. If the status is
+     *            unavailable, it is an error to send a location object.
      * @return
      */
     public ResponseBuilder withLocation(long time, String timezone, double latitude,
@@ -234,6 +241,30 @@ public class ResponseBuilder implements ProbeWriter.Builder {
      */
     public ResponseBuilder withSurveyLaunchContext(String surveyLaunchContext) {
         mSurveyLaunchContext = surveyLaunchContext;
+        return this;
+    }
+
+    /**
+     * Values which describes the survey's launch context.
+     * 
+     * @param launchTime
+     * @param launchTimezone
+     * @param activeTriggers
+     * @return
+     * @throws JSONException
+     */
+    public ResponseBuilder withSurveyLaunchContext(long launchTime, String launchTimezone,
+            String... activeTriggers) {
+        try {
+            JSONObject launchContext = new JSONObject();
+            launchContext.put("launch_time", launchTime);
+            launchContext.put("launch_timezone", launchTimezone);
+            launchContext.put("active_triggers", new JSONArray(Arrays.asList(activeTriggers)));
+            mSurveyLaunchContext = launchContext.toString();
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         return this;
     }
 
@@ -309,9 +340,9 @@ public class ResponseBuilder implements ProbeWriter.Builder {
             if (mSurveyId != null)
                 data.put("survey_id", mSurveyId);
             if (mSurveyLaunchContext != null)
-                data.put("survey_launch_context", mSurveyLaunchContext);
+                data.put("survey_launch_context", new JSONObject(mSurveyLaunchContext));
             if (mResponses != null)
-                data.put("responses", mResponses);
+                data.put("responses", new JSONArray(mResponses));
             if (data.length() > 0)
                 mData = data.toString();
         } catch (JSONException e) {
