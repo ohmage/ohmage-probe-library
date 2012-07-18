@@ -10,8 +10,8 @@ as an example apk which uses this library.
 [ProbeWriter](https://github.com/cens/ohmageProbeLibrary/wiki/ProbeWriter)
 -----------
 
-The [ProbeWriter](https://github.com/cens/ohmageProbeLibrary/wiki/ProbeWriter) helps with the
-creation of probe data to be sent to ohmage. It has the methods `connect()` and `disconnect()`
+The [ProbeWriter](https://github.com/cens/ohmageProbeLibrary/wiki/ProbeWriter) helps with managing
+a connection with ohmage to send probe data. It has the methods `connect()` and `close()`
 which help connect to ohmage. The ProbeWriter is a wrapper around the two aidl methods exposed
 by ohmage, `writeProbe` and `writeResponse`. These two methods are handled by `write` for Probes,
 and `writeResponse` for Responses. The ProbeWriter can be used by itself to write probe data to
