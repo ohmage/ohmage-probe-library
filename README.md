@@ -4,7 +4,7 @@ ohmageProbeLibrary
 The ohmageProbeLibrary is an Android Library apk which makes it easier to write a probe apk. The
 Library consists of the ProbeWriter which helps handle connecting and disconnecting from the
 ohmage service, as well as the ProbeBuilder and ResponseBuilder classes which help in creating
-the objects to send to ohmage. Look at [ohmageProbeExample](https://github.com/cketcham/ohmageProbeExample#readme)
+the objects to send to ohmage. Look at [ohmageProbeExample](https://github.com/cketcham/ohmageProbeExample)
 as an example apk which uses this library.
 
 ProbeWriter
@@ -13,7 +13,9 @@ ProbeWriter
 The probe writer helps with the creation of probe data to be sent to ohmage. It has the methods
 `connect()` and `disconnect()` which help connect to ohmage. The ProbeWriter is a wrapper around
 the two aidl methods exposed by ohmage, `writeProbe` and `writeResponse`. These two methods are
-handled by `write` for Probes, and `writeResponse` for Responses.
+handled by `write` for Probes, and `writeResponse` for Responses. The ProbeWriter can be used by
+itself to write probe data to ohmage, or the two Builders can be used to help with the process of
+formatting the data correctly.
 
 ProbeBuilder
 ------------
