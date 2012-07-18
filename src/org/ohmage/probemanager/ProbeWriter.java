@@ -95,7 +95,7 @@ public class ProbeWriter implements ServiceConnection {
         write(observerId, observerVersion, streamId, streamVersion, DEFAULT_UPLOAD_PRIORITY, metadata, data);
     }
 
-    public void writeResponse(String campaignUrn, String campaignCreationTimestamp,
+    public synchronized void writeResponse(String campaignUrn, String campaignCreationTimestamp,
             int uploadPriority, String data) throws RemoteException {
         if (dataService != null) {
             dataService.writeResponse(campaignUrn, campaignCreationTimestamp, uploadPriority, data);
@@ -107,6 +107,10 @@ public class ProbeWriter implements ServiceConnection {
                 mBuffer.clear(); // No point in buffering data if we can't
                                  // connect to the service
         }
+    }
+
+    public void writeResponse(String campaignUrn, String campaignCreationTimestamp, String data) throws RemoteException {
+        writeResponse(campaignUrn, campaignCreationTimestamp, DEFAULT_UPLOAD_PRIORITY, data);
     }
 
     public interface Builder {
