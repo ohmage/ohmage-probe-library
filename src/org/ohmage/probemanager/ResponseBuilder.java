@@ -325,8 +325,6 @@ public class ResponseBuilder implements ProbeWriter.Builder {
                 data.put("time", mTime);
             if (mTimezone != null)
                 data.put("timezone", mTimezone);
-            if (mLocationStatus != null)
-                data.put("location_status", mLocationStatus);
             if (mLocation != null) {
                 JSONObject location = new JSONObject();
                 location.put("time", mLocation.getTime());
@@ -343,8 +341,13 @@ public class ResponseBuilder implements ProbeWriter.Builder {
                 data.put("survey_launch_context", new JSONObject(mSurveyLaunchContext));
             if (mResponses != null)
                 data.put("responses", new JSONArray(mResponses));
-            if (data.length() > 0)
+            if (data.length() > 0) {
+                // If we set the data to something, we can set the location status
+                // This is only set if other fields are set to avoid overwriting the data
+                if (mLocationStatus != null)
+                    data.put("location_status", mLocationStatus);
                 mData = data.toString();
+            }
         } catch (JSONException e) {
             Log.e(TAG, "JSON format exception");
         }
