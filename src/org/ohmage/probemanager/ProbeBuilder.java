@@ -9,6 +9,8 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.UUID;
+
 /**
  * Probe builder class which makes it easy to create the probe response and send
  * it. More information on how the json data should be structured can be found
@@ -171,6 +173,17 @@ public class ProbeBuilder implements ProbeWriter.Builder {
      */
     public ProbeBuilder withId(String id) {
         mId = id;
+        return this;
+    }
+
+    /**
+     * Generates a UUID unique to this probe.
+     * 
+     * @param id
+     * @return
+     */
+    public ProbeBuilder withId() {
+        mId = UUID.randomUUID().toString();
         return this;
     }
 
