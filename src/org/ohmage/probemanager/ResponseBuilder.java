@@ -11,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
+import java.util.TimeZone;
 
 /**
  * Response builder class which makes it easy to create the response and send
@@ -174,6 +175,17 @@ public class ResponseBuilder implements ProbeWriter.Builder {
     public ResponseBuilder withTime(long time, String timezone) {
         mTime = time;
         mTimezone = timezone;
+        return this;
+    }
+
+    /**
+     * Sets the time for this response to now
+     * 
+     * @return
+     */
+    public ResponseBuilder now() {
+        mTime = System.currentTimeMillis();
+        mTimezone = TimeZone.getDefault().getID();
         return this;
     }
 

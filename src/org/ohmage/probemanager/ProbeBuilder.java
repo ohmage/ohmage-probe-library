@@ -9,6 +9,7 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.TimeZone;
 import java.util.UUID;
 
 /**
@@ -187,6 +188,10 @@ public class ProbeBuilder implements ProbeWriter.Builder {
         return this;
     }
 
+    public String id() {
+        return mId;
+    }
+
     /**
      * The ISO8601-formatted date-time-timezone string. If this is not present,
      * then the time and timezone fields will be used.
@@ -211,6 +216,17 @@ public class ProbeBuilder implements ProbeWriter.Builder {
     public ProbeBuilder withTime(long time, String timezone) {
         mTime = time;
         mTimezone = timezone;
+        return this;
+    }
+
+    /**
+     * Sets the time for this probe to now
+     * 
+     * @return
+     */
+    public ProbeBuilder now() {
+        mTime = System.currentTimeMillis();
+        mTimezone = TimeZone.getDefault().getID();
         return this;
     }
 
