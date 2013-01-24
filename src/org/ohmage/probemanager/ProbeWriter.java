@@ -7,6 +7,10 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.text.TextUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -72,16 +76,35 @@ public class ProbeWriter implements ServiceConnection {
         }
     }
 
-    public synchronized void write(String observerId, int observerVersion,
-            String streamId, int streamVersion, int uploadPriority, String metadata, String data)
+    public synchronized void write(String observerId, int observerVersion, String streamId,
+            int streamVersion, int uploadPriority, String metadata, String data)
             throws RemoteException {
+
+        if (TextUtils.isEmpty(data))
+            throw new RuntimeException("Must specify data");
+
+        // Check that the data is valid json
+        try {
+            new JSONObject(data);
+        } catch (JSONException e) {
+            throw new RuntimeException("data not valid json");
+        }
+
+        // Check that the metadata is valid json
+        if (!TextUtils.isEmpty(metadata)) {
+            try {
+                new JSONObject(metadata);
+            } catch (JSONException e) {
+                throw new RuntimeException("metadata not valid json");
+            }
+        }
+
         if (dataService != null) {
-            dataService.writeProbe(observerId, observerVersion, streamId, streamVersion, uploadPriority, metadata, data);
+            dataService.writeProbe(observerId, observerVersion, streamId, streamVersion,
+                    uploadPriority, metadata, data);
         } else {
             mBuffer.add(new ProbeBuilder(observerId, observerVersion)
-                    .setStream(streamId, streamVersion)
-                    .setData(data)
-                    .setMetadata(metadata)
+                    .setStream(streamId, streamVersion).setData(data).setMetadata(metadata)
                     .setUploadPriority(uploadPriority));
             if (!connect())
                 mBuffer.clear(); // No point in buffering data if we can't
@@ -90,9 +113,9 @@ public class ProbeWriter implements ServiceConnection {
     }
 
     public void write(String observerId, int observerVersion, String streamId, int streamVersion,
-            String metadata, String data)
-            throws RemoteException {
-        write(observerId, observerVersion, streamId, streamVersion, DEFAULT_UPLOAD_PRIORITY, metadata, data);
+            String metadata, String data) throws RemoteException {
+        write(observerId, observerVersion, streamId, streamVersion, DEFAULT_UPLOAD_PRIORITY,
+                metadata, data);
     }
 
     public synchronized void writeResponse(String campaignUrn, String campaignCreationTimestamp,
@@ -100,8 +123,7 @@ public class ProbeWriter implements ServiceConnection {
         if (dataService != null) {
             dataService.writeResponse(campaignUrn, campaignCreationTimestamp, uploadPriority, data);
         } else {
-            mBuffer.add(new ResponseBuilder(campaignUrn, campaignCreationTimestamp)
-                    .setData(data)
+            mBuffer.add(new ResponseBuilder(campaignUrn, campaignCreationTimestamp).setData(data)
                     .setUploadPriority(uploadPriority));
             if (!connect())
                 mBuffer.clear(); // No point in buffering data if we can't
@@ -109,7 +131,8 @@ public class ProbeWriter implements ServiceConnection {
         }
     }
 
-    public void writeResponse(String campaignUrn, String campaignCreationTimestamp, String data) throws RemoteException {
+    public void writeResponse(String campaignUrn, String campaignCreationTimestamp, String data)
+            throws RemoteException {
         writeResponse(campaignUrn, campaignCreationTimestamp, DEFAULT_UPLOAD_PRIORITY, data);
     }
 

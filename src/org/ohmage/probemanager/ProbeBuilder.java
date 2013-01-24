@@ -3,7 +3,6 @@ package org.ohmage.probemanager;
 
 import android.location.Location;
 import android.os.RemoteException;
-import android.text.TextUtils;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -254,8 +253,8 @@ public class ProbeBuilder implements ProbeWriter.Builder {
      * @param provider
      * @return
      */
-    public ProbeBuilder withLocation(long time, String timezone, double latitude,
-            double longitude, float accuracy, String provider) {
+    public ProbeBuilder withLocation(long time, String timezone, double latitude, double longitude,
+            float accuracy, String provider) {
         mLocation = new Location(provider);
         mLocation.setTime(time);
         mLocationTimezone = timezone;
@@ -305,8 +304,6 @@ public class ProbeBuilder implements ProbeWriter.Builder {
 
     private void setupWrite() {
         buildMetaData();
-        if (TextUtils.isEmpty(mData))
-            throw new RuntimeException("Must specify data");
     }
 
     /**
