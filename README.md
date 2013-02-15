@@ -31,3 +31,8 @@ to send the data to ohmage.
 
 The [ResponseBuilder](https://github.com/cens/ohmageProbeLibrary/wiki/ResponseBuilder) works
 similarly to the ProbeBuilder except that it assists with the creation of a response.
+
+Probe Examples
+--------------
+* [LogProbe](https://github.com/cens/LogProbe) - Wrapper around android.util.Log which uploads logs as an observer
+* [Mobility](https://github.com/cens/MobilityPhone) - An activity classification service for android
