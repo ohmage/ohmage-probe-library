@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="probe">
+        <attr name="observerId" format="string" />
+        <attr name="observerName" format="string" />
+        <attr name="observerVersionCode" format="integer" />
+        <attr name="observerVersionName" format="string" />
+    </declare-styleable>
+
+</resources>
