@@ -36,6 +36,14 @@ public class ProbeWriter implements ServiceConnection {
 
     private final Context mContext;
 
+    private ServiceConnectionChange mListener;
+
+    public static interface ServiceConnectionChange {
+        public void onServiceConnected(ProbeWriter writer);
+
+        public void onServiceDisconnected(ProbeWriter writer);
+    }
+
     public ProbeWriter(Context context) {
         mContext = context;
         mBuffer = new ArrayList<Builder>();
@@ -56,17 +64,27 @@ public class ProbeWriter implements ServiceConnection {
             }
         }
         mBuffer.clear();
+
+        if (mListener != null)
+            mListener.onServiceConnected(this);
     }
 
     /*** is called once the remote service is no longer available */
     @Override
     public void onServiceDisconnected(ComponentName name) {
         dataService = null;
+
+        if (mListener != null)
+            mListener.onServiceDisconnected(this);
     }
 
     public boolean connect() {
         Intent intent = new Intent(ACTION_WRITE_PROBE);
         return mContext.bindService(intent, this, Context.BIND_AUTO_CREATE);
+    }
+
+    public void setServiceConnectionChangeListener(ServiceConnectionChange listener) {
+        mListener = listener;
     }
 
     public void close() {
