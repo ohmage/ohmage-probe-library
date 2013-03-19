@@ -70,10 +70,8 @@ public class ProbeWriter implements ServiceConnection {
     }
 
     public void close() {
-        if (dataService != null) {
-            mContext.unbindService(this);
-            dataService = null;
-        }
+        mContext.unbindService(this);
+        dataService = null;
     }
 
     public synchronized void write(String observerId, int observerVersion, String streamId,
