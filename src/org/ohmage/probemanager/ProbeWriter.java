@@ -34,7 +34,7 @@ public class ProbeWriter implements ServiceConnection {
 
     private IProbeManager dataService;
 
-    private final Context mContext;
+    protected final Context mContext;
 
     private ServiceConnectionChange mListener;
 
