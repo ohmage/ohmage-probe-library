@@ -36,3 +36,50 @@ Probe Examples
 --------------
 * [LogProbe](https://github.com/cens/LogProbe) - Wrapper around android.util.Log which uploads logs as an observer
 * [Mobility](https://github.com/cens/MobilityPhone) - An activity classification service for android
+
+Expose Probe Information to ohmage
+----------------------------------
+
+Probes can also give information to ohmage so users can easily access and configure any probes installed on the system. A meta-data tag should be added to the manifest of the probe under the application tag. It will probably look like this:
+
+    <meta-data
+        android:name="org.ohmage.probemanager"
+        android:resource="@xml/probe" />
+
+In the /res/xml/ folder a probe.xml file should be created which defines your probe. The information should match the observer definition on the server:
+
+    <probe xmlns:probe="http://schemas.android.com/apk/res-auto"
+        probe:observerId="edu.ucla.cens.Mobility"
+        probe:observerName="Mobility"
+        probe:observerVersionCode="2012061300"
+        probe:observerVersionName="1.4.3" />
+
+Or if your apk has multiple probes you can define more than one with:
+
+    <probes xmlns:probe="http://schemas.android.com/apk/res-auto" >
+        <probe
+            probe:observerId="edu.ucla.cens.Mobility"
+            probe:observerName="Mobility"
+            probe:observerVersionCode="2012061300"
+            probe:observerVersionName="1.4.3" />
+        <probe
+            probe:observerId="org.ohmage.LogProbe"
+            probe:observerName="LogProbe"
+            probe:observerVersionCode="1"
+            probe:observerVersionName="1.0" />
+    </probes>
+
+In your manifest, you can also define activities which can handle `org.ohmage.probes.ACTION_CONFIGURE` and `org.ohmage.probes.ACTION_VIEW_ANALYTICS`. They should also specify a mimeType of `probe/observerId`. `org.ohmage.probes.ACTION_CONFIGURE` will be called when the user tries to configure your probe through ohmage and `org.ohmage.probes.ACTION_VIEW_ANALYTICS` will be called when the user tries to view data from your probe through ohmage. It will probably look something like this:
+
+    <activity android:name=".ConfigureActivity" android:label="@string/app_name">
+        <intent-filter>
+            <action android:name="org.ohmage.probes.ACTION_CONFIGURE" />
+            <data android:mimeType="probe/edu.ucla.cens.Mobility" />
+        </intent-filter>
+    </activity>
+    <activity android:name=".AnalyticsActivity" android:label="@string/app_name">
+        <intent-filter>
+            <action android:name="org.ohmage.probes.ACTION_VIEW_ANALYTICS" />
+            <data android:mimeType="probe/edu.ucla.cens.Mobility" />
+        </intent-filter>
+    </activity>
