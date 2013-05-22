@@ -219,6 +219,21 @@ public class ProbeBuilder implements ProbeWriter.Builder {
     }
 
     /**
+     * A long specifying the survey completion time by the number of
+     * milliseconds since the UNIX epoch. The timezone used is the current
+     * timezone.
+     * 
+     * @param time
+     * @param timezone
+     * @return
+     */
+    public ProbeBuilder withTime(long time) {
+        mTime = time;
+        mTimezone = TimeZone.getDefault().getID();
+        return this;
+    }
+
+    /**
      * Sets the time for this probe to now
      * 
      * @return
