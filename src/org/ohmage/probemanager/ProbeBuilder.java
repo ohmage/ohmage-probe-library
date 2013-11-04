@@ -310,6 +310,16 @@ public class ProbeBuilder implements ProbeWriter.Builder {
         return this;
     }
 
+    /**
+     * Returns the probes metadata
+     * @return returns the metadata as a JSON string
+     */
+    public String getMetadata() {
+        if(mMetadata == null)
+            buildMetaData();
+        return mMetadata;
+    }
+
     @Override
     public void write(ProbeWriter writer) throws RemoteException {
         setupWrite();
