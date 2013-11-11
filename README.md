@@ -1,6 +1,8 @@
 ohmageProbeLibrary
 ==================
 
+###This library has been depricated for ohmage 3.0 and is here only for compatibility with ohmage 2.x. The new library can be found here https://github.com/ohmage/android-stream-lib
+
 The ohmageProbeLibrary is an Android Library apk which makes it easier to write a probe apk. The
 Library consists of the ProbeWriter which helps handle connecting and disconnecting from the
 ohmage service, as well as the ProbeBuilder and ResponseBuilder classes which help in creating
