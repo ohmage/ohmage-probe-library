@@ -42,7 +42,7 @@ Probe Examples
 Expose Probe Information to ohmage
 ----------------------------------
 
-Probes can also give information to ohmage so users can easily access and configure any probes installed on the system. A meta-data tag should be added to the manifest of the probe under the application tag. It will probably look like this:
+**This is not required but it can be useful for the user to have control over their probe data**. Probes can also give information to ohmage so users can easily access and configure any probes installed on the system. A meta-data tag should be added to the manifest of the probe under the application tag. It will probably look like this:
 
     <meta-data
         android:name="org.ohmage.probemanager"
