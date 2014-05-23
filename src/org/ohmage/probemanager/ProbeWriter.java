@@ -38,6 +38,8 @@ public class ProbeWriter implements ServiceConnection {
 
     private ServiceConnectionChange mListener;
 
+    private boolean mShouldClose = false;
+
     public static interface ServiceConnectionChange {
         public void onServiceConnected(ProbeWriter writer);
 
@@ -54,6 +56,9 @@ public class ProbeWriter implements ServiceConnection {
     public synchronized void onServiceConnected(ComponentName name, IBinder service) {
         dataService = IProbeManager.Stub.asInterface(service);
 
+        if (mListener != null)
+            mListener.onServiceConnected(this);
+
         // Write any probes which came before we were connected
         for (Builder probe : mBuffer) {
             try {
@@ -65,8 +70,8 @@ public class ProbeWriter implements ServiceConnection {
         }
         mBuffer.clear();
 
-        if (mListener != null)
-            mListener.onServiceConnected(this);
+        if(mShouldClose)
+            close();
     }
 
     /*** is called once the remote service is no longer available */
@@ -88,8 +93,12 @@ public class ProbeWriter implements ServiceConnection {
     }
 
     public void close() {
-        mContext.unbindService(this);
-        dataService = null;
+        if(!mBuffer.isEmpty()) {
+            mShouldClose = true;
+        } else {
+            mContext.unbindService(this);
+            dataService = null;
+        }
     }
 
     public synchronized void write(String observerId, int observerVersion, String streamId,
